@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BankPro - Banking Management System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+    />
+    <link rel="stylesheet" href="css/styles.css" />
+  </head>
+  <body class="bg-gray-50">
+    <header class="bg-white shadow-sm">
+      <div class="container mx-auto px-4 py-4">
+        <div class="flex justify-between items-center">
+          <div class="flex items-center">
+            <i class="fas fa-university text-cyan-600 text-2xl mr-2"></i>
+            <h1 class="text-2xl font-bold text-cyan-600">BankPro</h1>
+          </div>
+          <nav class="hidden md:flex space-x-8">
+            <a href="#" class="text-gray-700 hover:text-cyan-600">Home</a>
+            <a href="#features" class="text-gray-700 hover:text-cyan-600"
+              >Features</a
+            >
+          </nav>
+          <div class="flex space-x-4">
+            <a
+              href="./login.html"
+              class="px-4 py-2 text-cyan-600 hover:text-cyan-700"
+              >Login</a
+            >
+            <a
+              href="./register.html"
+              class="px-4 py-2 bg-cyan-600 text-white rounded-md hover:bg-cyan-700"
+              >Register</a
+            >
+          </div>
+          <button class="md:hidden text-gray-700">
+            <i class="fas fa-bars text-xl"></i>
+          </button>
+        </div>
+      </div>
+    </header>
+    <section class="bg-cyan-600 text-white py-12">
+      <div class="container mx-auto px-4 text-center">
+        <h2 class="text-3xl font-bold mb-4">
+           Banking Management Solution
+        </h2>
+        <p class="text-lg mb-6 max-w-2xl mx-auto">
+          Streamline your banking operations.
+        </p>
+        <div class="flex justify-center space-x-4">
+          <a
+            href="./register.html"
+            class="px-6 py-2 bg-white text-cyan-600 rounded-md hover:bg-gray-100"
+            >Get Started</a
+          >
+          <a
+            href="#features"
+            class="px-6 py-2 border border-white text-white rounded-md hover:bg-cyan-700"
+            >Learn More</a
+          >
+        </div>
+      </div>
+    </section>
+    <section id="features" class="py-12 bg-white">
+      <div class="container mx-auto px-4">
+        <h2 class="text-2xl font-bold text-center text-gray-800 mb-8">
+          Our Features
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="border border-gray-200 p-6 rounded-lg">
+            <h3 class="text-xl font-bold text-cyan-600 mb-3">
+              Loan Management
+            </h3>
+            <p class="text-gray-600 mb-4">
+              Process loan applications.
+            </p>
+          </div>
+          <div class="border border-gray-200 p-6 rounded-lg">
+            <h3 class="text-xl font-bold text-cyan-600 mb-3">
+              Transaction Management
+            </h3>
+            <p class="text-gray-600 mb-4">
+              Process and monitor all banking transactions.
+            </p>
+          </div>
+          <div class="border border-gray-200 p-6 rounded-lg">
+            <h3 class="text-xl font-bold text-cyan-600 mb-3">
+              Customer Management
+            </h3>
+            <p class="text-gray-600 mb-4">
+              Maintain customer profiles.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="py-10 bg-gray-100">
+      <div class="container mx-auto px-4 text-center">
+        <h3 class="text-xl font-bold text-gray-800 mb-4">
+          Ready to professionalize your banking operations?
+        </h3>
+        <div class="flex justify-center space-x-4">
+          <a
+            href="./register.html"
+            class="px-6 py-2 bg-cyan-600 text-white rounded-md hover:bg-cyan-700"
+            >Sign Up Now</a
+          >
+        </div>
+      </div>
+    </section>
+    <footer class="bg-gray-800 text-white py-8">
+      <div class="container mx-auto px-4">
+        <div class="flex flex-col md:flex-row justify-between items-center">
+          <div class="mb-4 md:mb-0">
+            <div class="flex items-center justify-center md:justify-start">
+              <i class="fas fa-university text-cyan-400 text-xl mr-2"></i>
+              <h3 class="text-lg font-bold">BankPro</h3>
+            </div>
+          </div>
+          <div class="text-gray-400 text-sm text-center md:text-right">
+            © 2025 BankPro. All rights reserved.
+          </div>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

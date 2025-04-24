@@ -1,0 +1,828 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Transactions - BankPro Management System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+    />
+    <link rel="stylesheet" href="../css/styles.css" />
+    <script src="../js/middleware/script.js" defer></script>
+    <script src="../js/utilities/seed.js" defer></script>
+    <script src="../js/common/script.js" defer></script>
+  </head>
+  <body class="bg-gray-50">
+    <div class="flex h-screen overflow-hidden">
+      <aside
+        id="sidebar"
+        class="fixed inset-y-0 left-0 z-50 w-64 bg-cyan-800 text-white transform transition-transform duration-300 ease-in-out lg:translate-x-0 -translate-x-full"
+      >
+        <div class="flex items-center justify-between p-4">
+          <div class="flex items-center space-x-4">
+            <i class="fas fa-university text-2xl"></i>
+            <span class="text-xl font-semibold">BankPro</span>
+          </div>
+          <button
+            id="closeSidebar"
+            class="px-3 py-1 rounded-md hover:bg-cyan-700 lg:hidden"
+          >
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        <nav class="flex flex-col justify-between h-[calc(100%-70px)] px-1">
+          <div class="space-y-1">
+            <a
+              href="../utilities"
+              class="flex items-center px-4 py-3 text-white rounded-md hover:bg-cyan-700"
+            >
+              <i class="fas fa-home w-5 mr-3"></i>
+              <span>Dashboard</span>
+            </a>
+            <a
+              href="./loan-management.html"
+              class="flex items-center px-4 py-3 text-white rounded-md hover:bg-cyan-700"
+            >
+              <i class="fas fa-hand-holding-usd w-5 mr-3"></i>
+              <span>Loan</span>
+            </a>
+            <a
+              href="./customer-management.html"
+              class="flex items-center px-4 py-3 text-white rounded-md hover:bg-cyan-700"
+            >
+              <i class="fas fa-users w-5 mr-3"></i>
+              <span>Customers</span>
+            </a>
+            <a
+              href="./transaction-processing.html"
+              class="flex items-center px-4 bg-cyan-700 py-3 text-white rounded-md hover:bg-cyan-700"
+            >
+              <i class="fas fa-exchange-alt w-5 mr-3"></i>
+              <span>Transactions</span>
+            </a>
+          </div>
+          <button
+            id="logoutButton"
+            class="flex items-center px-4 py-3 text-white rounded-md hover:bg-cyan-700 mt-1"
+          >
+            <i class="fas fa-sign-out-alt w-5 mr-3"></i>
+            <span>Logout</span>
+          </button>
+        </nav>
+      </aside>
+      <div class="flex-1 flex flex-col lg:ml-64">
+        <header class="bg-white w-full border-b z-10">
+          <div class="flex items-center px-4 py-3">
+            <button
+              id="openSidebar"
+              class="px-3 py-1 rounded-md text-gray-600 hover:bg-gray-100 lg:hidden"
+            >
+              <i class="fas fa-bars"></i>
+            </button>
+            <div class="flex w-full justify-end items-center text-gray-600">
+              <span class="text-sm">Welcome,</span>
+              <span class="ml-2 text-sm font-medium" id="userEmail"
+                >admin@bankpro.com</span
+              >
+            </div>
+          </div>
+        </header>
+        <main class="flex-1 overflow-y-auto p-4 bg-gray-50">
+          <div
+            class="mb-6 flex flex-col md:flex-row md:items-center md:justify-between"
+          >
+            <div>
+              <h1 class="text-2xl font-semibold text-gray-800">Transactions</h1>
+              <p class="text-gray-600">
+                Create and manage customer transactions
+              </p>
+            </div>
+          </div>
+          <div class="bg-white rounded-lg shadow mb-6 p-6">
+            <h2 class="text-lg font-medium text-gray-800 mb-4">
+              Create New Transaction
+            </h2>
+            <form id="transactionForm" class="space-y-4">
+              <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+                <div>
+                  <label
+                    for="transactionId"
+                    class="block text-sm font-medium text-gray-700 mb-1"
+                    >Transaction ID</label
+                  >
+                  <input
+                    type="text"
+                    id="transactionId"
+                    name="transactionId"
+                    class="block w-full py-2 px-3 border border-gray-300 rounded-md bg-gray-100 focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm"
+                    readonly
+                  />
+                  <p
+                    id="transactionIdError"
+                    class="mt-1 text-sm text-red-600 hidden"
+                  ></p>
+                </div>
+                <div>
+                  <label
+                    for="transactionType"
+                    class="block text-sm font-medium text-gray-700 mb-1"
+                    >Transaction Type</label
+                  >
+                  <select
+                    id="transactionType"
+                    name="transactionType"
+                    class="block w-full pl-3 pr-10 py-2 border border-gray-300 rounded-md focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm"
+                    required
+                  >
+                    <option value="">Select Type</option>
+                    <option value="deposit">Deposit</option>
+                    <option value="withdrawal">Withdrawal</option>
+                    <option value="transfer">Transfer</option>
+                  </select>
+                  <p
+                    id="transactionTypeError"
+                    class="mt-1 text-sm text-red-600 hidden"
+                  ></p>
+                </div>
+              </div>
+              <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+                <div>
+                  <label
+                    for="customerSsnId"
+                    class="block text-sm font-medium text-gray-700 mb-1"
+                    >Customer SSN ID</label
+                  >
+                  <input
+                    type="text"
+                    id="customerSsnId"
+                    name="customerSsnId"
+                    class="block w-full py-2 px-3 border border-gray-300 rounded-md focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm"
+                    placeholder="SSNXXXXXXXX"
+                    required
+                  />
+                  <p
+                    id="customerSsnIdError"
+                    class="mt-1 text-sm text-red-600 hidden"
+                  ></p>
+                </div>
+                <div>
+                  <label
+                    for="customerName"
+                    class="block text-sm font-medium text-gray-700 mb-1"
+                    >Customer Name</label
+                  >
+                  <input
+                    type="text"
+                    id="customerName"
+                    name="customerName"
+                    class="block w-full py-2 px-3 border border-gray-300 rounded-md focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm"
+                    placeholder="Full Name"
+                    required
+                  />
+                  <p
+                    id="customerNameError"
+                    class="mt-1 text-sm text-red-600 hidden"
+                  ></p>
+                </div>
+              </div>
+              <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+                <div>
+                  <label
+                    for="accountId"
+                    class="block text-sm font-medium text-gray-700 mb-1"
+                    >Account ID</label
+                  >
+                  <input
+                    type="text"
+                    id="accountId"
+                    name="accountId"
+                    class="block w-full py-2 px-3 border border-gray-300 rounded-md focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm"
+                    placeholder="Account Number"
+                    required
+                  />
+                  <p
+                    id="accountIdError"
+                    class="mt-1 text-sm text-red-600 hidden"
+                  ></p>
+                </div>
+                <div id="destinationAccountContainer" class="hidden">
+                  <label
+                    for="destinationAccountId"
+                    class="block text-sm font-medium text-gray-700 mb-1"
+                    >Destination Account ID</label
+                  >
+                  <input
+                    type="text"
+                    id="destinationAccountId"
+                    name="destinationAccountId"
+                    class="block w-full py-2 px-3 border border-gray-300 rounded-md focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm"
+                    placeholder="Destination Account Number"
+                  />
+                  <p
+                    id="destinationAccountIdError"
+                    class="mt-1 text-sm text-red-600 hidden"
+                  ></p>
+                </div>
+                <div>
+                  <label
+                    for="aadharCardNo"
+                    class="block text-sm font-medium text-gray-700 mb-1"
+                    >Aadhar Card No.</label
+                  >
+                  <input
+                    type="text"
+                    id="aadharCardNo"
+                    name="aadharCardNo"
+                    class="block w-full py-2 px-3 border border-gray-300 rounded-md focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm"
+                    placeholder="XXXXXXXXXXXX"
+                    required
+                  />
+                  <p
+                    id="aadharCardNoError"
+                    class="mt-1 text-sm text-red-600 hidden"
+                  ></p>
+                </div>
+              </div>
+              <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+                <div>
+                  <label
+                    for="panCardNo"
+                    class="block text-sm font-medium text-gray-700 mb-1"
+                    >PAN Card No.</label
+                  >
+                  <input
+                    type="text"
+                    id="panCardNo"
+                    name="panCardNo"
+                    class="block w-full py-2 px-3 border border-gray-300 rounded-md focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm"
+                    placeholder="ABCDE1234F"
+                    required
+                  />
+                  <p
+                    id="panCardNoError"
+                    class="mt-1 text-sm text-red-600 hidden"
+                  ></p>
+                </div>
+                <div>
+                  <label
+                    for="contactNumber"
+                    class="block text-sm font-medium text-gray-700 mb-1"
+                    >Contact Number</label
+                  >
+                  <input
+                    type="tel"
+                    id="contactNumber"
+                    name="contactNumber"
+                    class="block w-full py-2 px-3 border border-gray-300 rounded-md focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm"
+                    placeholder="Contact Number"
+                    required
+                  />
+                  <p
+                    id="contactNumberError"
+                    class="mt-1 text-sm text-red-600 hidden"
+                  ></p>
+                </div>
+              </div>
+              <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+                <div>
+                  <label
+                    for="transactionDate"
+                    class="block text-sm font-medium text-gray-700 mb-1"
+                    >Date</label
+                  >
+                  <input
+                    type="date"
+                    name="transactionDate"
+                    id="transactionDate"
+                    class="block w-full py-2 px-3 border border-gray-300 rounded-md focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm"
+                    required
+                  />
+                  <p
+                    id="transactionDateError"
+                    class="mt-1 text-sm text-red-600 hidden"
+                  ></p>
+                </div>
+                <div>
+                  <label
+                    for="modeOfTransaction"
+                    class="block text-sm font-medium text-gray-700 mb-1"
+                    >Mode of Transaction</label
+                  >
+                  <select
+                    id="modeOfTransaction"
+                    name="modeOfTransaction"
+                    class="block w-full pl-3 pr-10 py-2 border border-gray-300 rounded-md focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm"
+                    required
+                  >
+                    <option value="">Select Mode</option>
+                    <option value="cash">Cash</option>
+                    <option value="cheque">Cheque</option>
+                    <option value="upi">UPI</option>
+                    <option value="neft">NEFT</option>
+                    <option value="rtgs">RTGS</option>
+                    <option value="imps">IMPS</option>
+                  </select>
+                  <p
+                    id="modeOfTransactionError"
+                    class="mt-1 text-sm text-red-600 hidden"
+                  ></p>
+                </div>
+              </div>
+              <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+                <div>
+                  <label
+                    for="amount"
+                    class="block text-sm font-medium text-gray-700 mb-1"
+                    >Amount of Transaction</label
+                  >
+                  <div class="relative">
+                    <div
+                      class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
+                    >
+                      <span class="text-gray-500 sm:text-sm">₹</span>
+                    </div>
+                    <input
+                      type="number"
+                      name="amount"
+                      id="amount"
+                      class="block w-full pl-7 pr-12 py-2 border border-gray-300 rounded-md focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm"
+                      placeholder="0.00"
+                      step="0.01"
+                      min="0"
+                      required
+                    />
+                  </div>
+                  <p
+                    id="amountError"
+                    class="mt-1 text-sm text-red-600 hidden"
+                  ></p>
+                </div>
+              </div>
+              <div>
+                <label
+                  for="address"
+                  class="block text-sm font-medium text-gray-700 mb-1"
+                  >Address</label
+                >
+                <textarea
+                  id="address"
+                  name="address"
+                  rows="3"
+                  class="block w-full py-2 px-3 border border-gray-300 rounded-md focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm"
+                  placeholder="Customer Address"
+                  required
+                ></textarea>
+                <p
+                  id="addressError"
+                  class="mt-1 text-sm text-red-600 hidden"
+                ></p>
+              </div>
+              <div class="flex justify-end">
+                <button
+                  type="button"
+                  id="resetTransactionBtn"
+                  class="bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500 mr-3"
+                >
+                  Reset
+                </button>
+                <button
+                  type="submit"
+                  class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-cyan-600 hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500"
+                >
+                  Process Transaction
+                </button>
+              </div>
+            </form>
+          </div>
+          <div class="bg-white rounded-lg shadow overflow-hidden">
+            <div
+              class="px-4 py-3 border-b border-gray-200 flex justify-between items-center"
+            >
+              <h2 class="text-lg font-medium text-gray-800">
+                Transaction History
+              </h2>
+              <div class="flex space-x-2">
+                <select
+                  id="filterTransactions"
+                  class="text-sm border border-gray-300 rounded-md focus:ring-cyan-500 focus:border-cyan-500 py-1 px-2"
+                >
+                  <option value="all">All Transactions</option>
+                  <option value="deposit">Deposits</option>
+                  <option value="withdrawal">Withdrawals</option>
+                  <option value="transfer">Transfers</option>
+                </select>
+                <button
+                  id="refreshTransactions"
+                  class="p-2 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 flex items-center justify-center"
+                >
+                  <i class="fas fa-sync-alt"></i>
+                </button>
+              </div>
+            </div>
+            <div class="overflow-x-auto">
+              <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                  <tr>
+                    <th
+                      scope="col"
+                      class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                    >
+                      Date
+                    </th>
+                    <th
+                      scope="col"
+                      class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                    >
+                      Transaction ID
+                    </th>
+                    <th
+                      scope="col"
+                      class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                    >
+                      Customer
+                    </th>
+                    <th
+                      scope="col"
+                      class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                    >
+                      Account
+                    </th>
+                    <th
+                      scope="col"
+                      class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                    >
+                      Type
+                    </th>
+                    <th
+                      scope="col"
+                      class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                    >
+                      Amount
+                    </th>
+                    <th
+                      scope="col"
+                      class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                    >
+                      Mode
+                    </th>
+                    <th
+                      scope="col"
+                      class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                    >
+                      Transfer Details
+                    </th>
+                    <th
+                      scope="col"
+                      class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider"
+                    >
+                      Actions
+                    </th>
+                  </tr>
+                </thead>
+                <tbody
+                  id="transactionList"
+                  class="bg-white divide-y divide-gray-200"
+                >
+                  <tr>
+                    <td
+                      colspan="9"
+                      class="px-6 py-4 text-center text-sm text-gray-500"
+                    >
+                      No transactions found. Create a new transaction to get
+                      started.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="px-4 py-3 bg-gray-50 border-t border-gray-200 sm:px-6">
+              <div class="flex items-center justify-between">
+                <div class="text-sm text-gray-700">
+                  Showing <span id="transactionCount">0</span> transactions
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            id="successModal"
+            class="fixed inset-0 bg-gray-600 bg-opacity-75 flex items-center justify-center z-50 hidden"
+          >
+            <div class="bg-white rounded-lg shadow-xl w-full max-w-md mx-4">
+              <div class="p-6">
+                <div class="flex items-center justify-center mb-4">
+                  <div
+                    class="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-green-100"
+                  >
+                    <i class="fas fa-check-circle text-2xl text-green-600"></i>
+                  </div>
+                </div>
+                <h3
+                  class="text-lg font-medium text-gray-900 text-center mb-2"
+                  id="successModalTitle"
+                >
+                  Success!
+                </h3>
+                <p class="text-gray-600 text-center" id="successModalMessage">
+                  Transaction Processed Successfully
+                </p>
+                <div class="mt-6">
+                  <button
+                    id="closeSuccessModal"
+                    class="w-full px-4 py-2 bg-cyan-600 text-white rounded-md hover:bg-cyan-700 text-sm font-medium"
+                  >
+                    OK
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            id="viewTransactionModal"
+            class="fixed inset-0 z-50 overflow-y-auto hidden"
+          >
+            <div
+              class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center"
+            >
+              <div
+                class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
+              ></div>
+              <div
+                class="inline-block bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all my-8 max-w-sm sm:max-w-md md:max-w-lg w-full"
+              >
+                <div
+                  class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4 overflow-y-auto max-h-[80vh]"
+                >
+                  <div class="mt-3 text-left w-full">
+                    <h3 class="text-lg leading-6 font-medium text-gray-900">
+                      Transaction Details
+                    </h3>
+                    <div class="mt-4 space-y-4">
+                      <div class="border-b border-gray-200 pb-4">
+                        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                          <div>
+                            <p class="text-sm font-medium text-gray-500">
+                              Transaction ID
+                            </p>
+                            <p
+                              class="mt-1 text-sm text-gray-900 break-words"
+                              id="viewTransactionId"
+                            >
+                              TX123456
+                            </p>
+                          </div>
+                          <div>
+                            <p class="text-sm font-medium text-gray-500">
+                              Date
+                            </p>
+                            <p
+                              class="mt-1 text-sm text-gray-900 break-words"
+                              id="viewTransactionDate"
+                            >
+                              01/01/2025
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="border-b border-gray-200 pb-4">
+                        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                          <div>
+                            <p class="text-sm font-medium text-gray-500">
+                              Customer Name
+                            </p>
+                            <p
+                              class="mt-1 text-sm text-gray-900 break-words"
+                              id="viewCustomerName"
+                            >
+                              John Doe
+                            </p>
+                          </div>
+                          <div>
+                            <p class="text-sm font-medium text-gray-500">
+                              Account ID
+                            </p>
+                            <p
+                              class="mt-1 text-sm text-gray-900 break-words"
+                              id="viewAccountId"
+                            >
+                              ACC12345678
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="border-b border-gray-200 pb-4">
+                        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                          <div>
+                            <p class="text-sm font-medium text-gray-500">
+                              Transaction Type
+                            </p>
+                            <p
+                              class="mt-1 text-sm text-gray-900 break-words"
+                              id="viewTransactionType"
+                            >
+                              Deposit
+                            </p>
+                          </div>
+                          <div>
+                            <p class="text-sm font-medium text-gray-500">
+                              Amount
+                            </p>
+                            <p
+                              class="mt-1 text-sm text-gray-900 break-words"
+                              id="viewAmount"
+                            >
+                              ₹5,000
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="border-b border-gray-200 pb-4">
+                        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                          <div>
+                            <p class="text-sm font-medium text-gray-500">
+                              Mode of Transaction
+                            </p>
+                            <p
+                              class="mt-1 text-sm text-gray-900 break-words"
+                              id="viewModeOfTransaction"
+                            >
+                              Cash
+                            </p>
+                          </div>
+                          <div
+                            id="viewDestinationAccountContainer"
+                            class="hidden"
+                          >
+                            <p class="text-sm font-medium text-gray-500">
+                              Destination Account
+                            </p>
+                            <p
+                              class="mt-1 text-sm text-gray-900 break-words"
+                              id="viewDestinationAccountId"
+                            >
+                              ACC87654321
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="border-b border-gray-200 pb-4">
+                        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                          <div>
+                            <p class="text-sm font-medium text-gray-500">
+                              Contact Number
+                            </p>
+                            <p
+                              class="mt-1 text-sm text-gray-900 break-words"
+                              id="viewContactNumber"
+                            >
+                              9876543210
+                            </p>
+                          </div>
+                          <div>
+                            <p class="text-sm font-medium text-gray-500">
+                              Customer SSN ID
+                            </p>
+                            <p
+                              class="mt-1 text-sm text-gray-900 break-words"
+                              id="viewCustomerSsnId"
+                            >
+                              SSN12345678
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                      <div>
+                        <p class="text-sm font-medium text-gray-500">Address</p>
+                        <p
+                          class="mt-1 text-sm text-gray-900 break-words"
+                          id="viewAddress"
+                        >
+                          123 Main St, City, State
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  class="bg-gray-50 px-4 py-3 sm:px-6 flex justify-center sm:justify-end"
+                >
+                  <button
+                    type="button"
+                    id="closeViewTransactionBtn"
+                    class="w-full sm:w-auto inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 sm:text-sm"
+                  >
+                    Close
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            id="deleteTransactionModal"
+            class="fixed inset-0 z-50 overflow-y-auto hidden"
+          >
+            <div
+              class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center"
+            >
+              <div
+                class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
+              ></div>
+              <span class="hidden sm:inline-block sm:align-middle sm:h-screen"
+                >&#8203;</span
+              >
+              <div
+                class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg w-full max-w-sm"
+              >
+                <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                  <div class="sm:flex sm:items-start">
+                    <div
+                      class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10"
+                    >
+                      <i class="fas fa-exclamation-triangle text-red-600"></i>
+                    </div>
+                    <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+                      <h3 class="text-lg leading-6 font-medium text-gray-900">
+                        Delete Transaction
+                      </h3>
+                      <div class="mt-2">
+                        <p class="text-sm text-gray-500">
+                          Are you sure you want to delete this transaction? This
+                          action cannot be undone.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  class="bg-gray-50 px-4 py-3 sm:px-6 flex flex-col sm:flex-row-reverse sm:gap-3"
+                >
+                  <button
+                    type="button"
+                    id="confirmDeleteTransactionBtn"
+                    class="w-full sm:w-auto inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 mb-2 sm:mb-0 sm:text-sm"
+                  >
+                    Delete
+                  </button>
+                  <button
+                    type="button"
+                    id="cancelDeleteTransactionBtn"
+                    class="w-full sm:w-auto inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 sm:text-sm"
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </main>
+        <footer class="bg-white p-4 shadow mt-auto">
+          <div class="text-center text-gray-600 text-sm">
+            <p>&copy; 2025 BankPro. All rights reserved.</p>
+          </div>
+        </footer>
+      </div>
+    </div>
+    <script src="../js/utilities/validation.js" defer></script>
+    <script src="../js/utilities/storage.js" defer></script>
+    <script src="../js/auth/script.js" defer></script>
+    <script src="../js/transactions/script.js" defer></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const sidebar = document.getElementById("sidebar");
+        const openSidebar = document.getElementById("openSidebar");
+        const closeSidebar = document.getElementById("closeSidebar");
+        const transactionTypeSelect =
+          document.getElementById("transactionType");
+        const destinationAccountContainer = document.getElementById(
+          "destinationAccountContainer",
+        );
+        openSidebar?.addEventListener("click", () => {
+          sidebar.classList.remove("-translate-x-full");
+        });
+        closeSidebar?.addEventListener("click", () => {
+          sidebar.classList.add("-translate-x-full");
+        });
+        transactionTypeSelect?.addEventListener("change", () => {
+          if (transactionTypeSelect.value === "transfer") {
+            destinationAccountContainer.classList.remove("hidden");
+            document
+              .getElementById("destinationAccountId")
+              .setAttribute("required", "true");
+          } else {
+            destinationAccountContainer.classList.add("hidden");
+            document
+              .getElementById("destinationAccountId")
+              .removeAttribute("required");
+          }
+        });
+      });
+    </script>
+  </body>
+</html>
